@@ -30,12 +30,7 @@ module Azure
 
       def call(method, uri, body=nil, headers=nil)
         if headers && !body.nil?
-          if headers['Content-Encoding'].nil?
-            headers['Content-Encoding'] = body.encoding.to_s
-          else 
-            body.force_encoding(headers['Content-Encoding']) 
-          end
-        end
+          headers['Content-Encoding'] = body.encoding.to_s if headers['Content-Encoding'].nil?
 
         request = Core::Http::HttpRequest.new(method, uri, body)
         request.headers.merge!(headers) if headers
@@ -47,7 +42,7 @@ module Azure
         response = request.call
 
         if !response.nil? && !response.body.nil? && response.headers['content-encoding']
-          response.body.force_encoding(response.headers['content-encoding']) 
+          response.body.force_encoding(response.headers['content-encoding'])
         end
 
         response
