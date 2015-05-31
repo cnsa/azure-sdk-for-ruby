@@ -30,11 +30,7 @@ module Azure
 
       def call(method, uri, body=nil, headers=nil)
         if headers && !body.nil?
-          if headers['Content-Encoding'].nil?
-            headers['Content-Encoding'] = body.encoding.to_s
-          else 
-            body.force_encoding(headers['Content-Encoding']) 
-          end
+          headers['Content-Encoding'] = body.encoding.to_s if headers['Content-Encoding'].nil?
         end
 
         request = Core::Http::HttpRequest.new(method, uri, body)
